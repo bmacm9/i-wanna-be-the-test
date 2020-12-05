@@ -1,12 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
 
     private Animator playerAnimator;
     bool isgrounded = true;
+    private bool dead = false;
+    public GameObject playerDead;
+    public AudioSource audioSource;
+    public AudioClip musicaDeMuerte;
+    public AudioClip sonidoMorir;
+    public float volume = 0.1f;
+
+    public GameObject menu; // Assign in inspector
 
     // Start is called before the first frame update
     void Start()
@@ -19,6 +28,11 @@ public class PlayerController : MonoBehaviour
     {
         isMoving();
         isJumping();
+        isDead();
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            dead = true;
+        }
     }
 
     public bool playerIsFalling()
@@ -32,6 +46,20 @@ public class PlayerController : MonoBehaviour
             return true;
         }
         else return false;
+    }
+
+    public bool isDead()
+    {
+        if(dead)
+        {
+            Destroy(GameObject.FindGameObjectWithTag("Player"));
+            Instantiate(playerDead, GetComponent<Transform>().position, GetComponent<Transform>().rotation * Quaternion.Euler(0f, 0f, -31f));
+            audioSource.PlayOneShot(sonidoMorir, volume);
+            audioSource.PlayOneShot(musicaDeMuerte, volume);
+            menu.SetActive(true);
+            return true;
+        }
+        return false;
     }
 
     public void isMoving()

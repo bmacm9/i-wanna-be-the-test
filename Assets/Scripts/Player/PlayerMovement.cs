@@ -13,6 +13,10 @@ public class PlayerMovement : MonoBehaviour
     private int saltos;
     bool isgrounded = true;
     public GameObject bulletPrefab;
+    public AudioSource audioSource;
+    public AudioClip sonidoDisparar;
+    public AudioClip sonidoSaltar;
+    public float volume = 0.5f;
     void Start()
     {
         acceleration = 1f;
@@ -28,7 +32,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.J) && Input.anyKey)
         {
-            if(!GetComponent<SpriteRenderer>().flipX)
+            audioSource.PlayOneShot(sonidoDisparar, volume);
+            if (!GetComponent<SpriteRenderer>().flipX)
                 Instantiate(bulletPrefab, new Vector2(GetComponent<Transform>().position.x + 0.3f, GetComponent<Transform>().position.y - 0.1f), Quaternion.identity);
             else Instantiate(bulletPrefab, new Vector2(GetComponent<Transform>().position.x - 0.3f, GetComponent<Transform>().position.y - 0.1f), Quaternion.identity);
         }
@@ -38,6 +43,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 speed += acceleration * Time.deltaTime;
             }
+            audioSource.PlayOneShot(sonidoSaltar, volume);
             playerSpriteRenderer.flipX = true;
             GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.y, 4);
             GetComponent<Rigidbody2D>().velocity = new Vector2(-1 * (speed), GetComponent<Rigidbody2D>().velocity.y);
@@ -49,6 +55,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 speed += acceleration * Time.deltaTime;
             }
+            audioSource.PlayOneShot(sonidoSaltar, volume);
             playerSpriteRenderer.flipX = false;
             GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.y, 4);
             GetComponent<Rigidbody2D>().velocity = new Vector2(speed, GetComponent<Rigidbody2D>().velocity.y);
@@ -61,6 +68,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 speed += acceleration * Time.deltaTime;
             }
+            audioSource.PlayOneShot(sonidoSaltar, volume);
             GetComponent<Rigidbody2D>().velocity = new Vector2(0, GetComponent<Rigidbody2D>().velocity.y);
             GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, 4);
             saltos++;
